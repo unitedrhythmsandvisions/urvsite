@@ -105,7 +105,6 @@
     .nav a:hover{transform: translateY(-1px); opacity:1}
     .nav a:hover::before{opacity:1; transform:scale(1)}
 
-/* layout */
     main{width:min(1200px, 92vw); margin:0 auto; padding:96px 0 96px}
     section{padding:52px 0}
     .section-title{
@@ -527,10 +526,13 @@ As trumpet section leader for the Marching Scarlet Knights, Carlos has performed
         name: "Anthony Salvador Lewis",
         role: "Vocalist",
         img: "Anthony Salvador Lewis.jpg",
-        bio: `A crippling knee injury on the Football field as a star running back for Central Jersey highschool led Anthony to abandon his dreams of Olympic gold as a world class high hurdler and a career in the NFL. Eventually from a suggestion by his mother who saw that her son was bored to tears with his college business major, he found a relacement and attention he didn't know he was missing from his highly publicized, praiseworthy career as highschool athlete in singing and acting. Theatre to be exact.
+        bio: `Anthony Salvador Lewis’s path to the stage began with a sudden pivot. A serious knee injury (sustained while he was a standout running back at a Central Jersey high school) forced him to step away from dreams of Olympic competition as a world-class high hurdler and a future in the NFL. At the urging of his mother (who could see he was uninspired by a college business major), Anthony discovered a new kind of purpose: singing and acting (especially in the theater).
 
-After a many storied, often frustrating but undeniably wild, crazy and fun years in Showbiz as an actor, frontman for a number of N.J club bands and a popular solo artist and actor for Pilipino audiences in the U.S. and abroad (his single "Amsterdam" can be heard on many streaming platforms). Anthony is an alumni of the Lee Strasberg Theatre institute and HB studio in NYC has found success in the recent years in guest and co-starring roles hit TV shows such as "The Blacklist" "Billions" and Comedy Centrals, "Chappelle show" and "Alternatino" as the Shaman Utuqiel, among others. He has shared the silver screen w luminaries including James Spader, Paul Giamatti Arturo Castro and Edie Falco
-Anthony finds it a sublime thrill and an honor to be working with the consumate artist, composer and song sculpter, Luis DeJesús and his dedicated, handpicked band of top caliber musicians.`
+What followed were years of hard-earned, unpredictable, and unforgettable work in show business. Anthony built a reputation as a dynamic actor, a frontman for New Jersey club bands, and a popular solo performer, including performances for Filipino audiences in the U.S. and abroad. His single “Amsterdam” can be heard on major streaming platforms.
+
+A graduate of the Lee Strasberg Theatre & Film Institute and HB Studio in New York City, Anthony has appeared in guest and co-starring roles on television series including The Blacklist, Billions, and Comedy Central’s Chappelle’s Show and Alternatino (as the Shaman Utuqiel). He has shared the screen with acclaimed actors such as James Spader, Paul Giamatti, Arturo Castro, and Edie Falco.
+
+Anthony considers it a true honor to work with the consummate artist, composer, and song sculptor Luis de Jesús and his dedicated, handpicked ensemble of top-caliber musicians.`
       },
       {
         name: "Charlie Martinez",
@@ -568,11 +570,24 @@ In addition to live performances and recordings featured on various CDs and YouT
       },
     ];
 
+    // add stable ids for anchor links
+    function slugId(name){
+      return name
+        .toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .replace(/[^a-z0-9\s-]/g,'')
+        .trim()
+        .replace(/\s+/g,'-');
+    }
+    membersRaw.forEach(m=> m.id = 'm-' + slugId(m.name));
+
     const bandWrap = document.getElementById('band-wrap');
 
     function memberCard(m){
       const card = document.createElement('article');
       card.className = 'card reveal';
+      card.id = m.id;
+
 
       const inner = document.createElement('div');
       inner.className = 'card-inner';
@@ -641,8 +656,10 @@ const bio = document.createElement('div');
     const rest = membersRaw.filter(m => m !== luis).sort((a,b)=> lastName(a.name).localeCompare(lastName(b.name)));
     const members = luis ? [luis, ...rest] : rest;
 
+    
     members.forEach(m => bandWrap.appendChild(memberCard(m)));
-// Scroll reveal
+
+    // Scroll reveal
     const io = new IntersectionObserver((entries)=>{
       for(const e of entries){
         if(e.isIntersecting) e.target.classList.add('is-in');
