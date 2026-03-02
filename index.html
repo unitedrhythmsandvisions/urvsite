@@ -357,9 +357,50 @@ h1{
       white-space: normal;
     }
 
-    /* reveal */
-    .reveal{opacity:0; transform: translateY(16px);}
-    .reveal.is-in{opacity:1; transform: translateY(0); transition: opacity .7s ease, transform .7s ease;}
+    /* reveal (no invisibility): soft focus + tiny scale settle */
+    .reveal{
+      opacity:1;
+      transform: scale(.985);
+      filter: blur(3px) saturate(.95) contrast(.95);
+      transition: transform .7s ease, filter .8s ease;
+      will-change: transform, filter;
+    }
+    .reveal.is-in{
+      transform: scale(1);
+      filter: blur(0) saturate(1) contrast(1);
+    }
+
+    /* very gentle shimmer while in view */
+    .shimmer{position:relative; isolation:isolate;}
+    .shimmer > *{position:relative; z-index:1;}
+    .shimmer::after{
+      content:"";
+      position:absolute;
+      inset:-45%;
+      z-index:0;
+      pointer-events:none;
+      opacity:0;
+      filter: blur(14px);
+      background: linear-gradient(120deg,
+        transparent 42%,
+        rgba(255,255,255,.055) 50%,
+        transparent 58%);
+      transform: translate3d(-26%,0,0) rotate(8deg);
+      mix-blend-mode: screen;
+    }
+    .shimmer.is-view::after{
+      opacity:.9;
+      animation: shimmerMove 7.5s ease-in-out infinite;
+    }
+    @keyframes shimmerMove{
+      0%{transform: translate3d(-26%,0,0) rotate(8deg)}
+      100%{transform: translate3d(26%,0,0) rotate(8deg)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal{transition:none;}
+      .shimmer::after{animation:none !important; opacity:0 !important;}
+    }
 
     footer{
       padding:30px 0 0;
@@ -382,7 +423,7 @@ h1{
 <!-- Section 1 -->
 <section class="hero">
 <div class="hero-grid">
-<div class="brand reveal">
+<div class="brand reveal shimmer">
 <div class="brand-inner">
 <div class="logo-row" style="align-items:flex-start; gap:32px">
 <div aria-hidden="true" class="logo">
@@ -396,7 +437,7 @@ h1{
 </div>
 </div>
 </div>
-<div class="video-card reveal" id="video-card">
+<div class="video-card reveal shimmer" id="video-card">
 <div aria-label="Play video" class="video-frame" id="video-frame" role="button" tabindex="0">
 <img alt="Video poster" class="poster" src="TheBand16x9.jpg"/>
 <div aria-hidden="true" class="poster-sheen"></div>
@@ -413,7 +454,7 @@ h1{
 <!-- Section 2 -->
 <section class="anchor" id="contact">
 <h2 class="section-title reveal">Contact</h2>
-<div class="contact reveal">
+<div class="contact reveal shimmer">
 <p>For bookings, contact Luis de Jesús at 732-632-7214</p>
 </div>
 </section>
@@ -590,7 +631,7 @@ In addition to live performances and recordings featured on various CDs and YouT
 
     function memberCard(m){
       const card = document.createElement('article');
-      card.className = 'card reveal';
+      card.className = 'card reveal shimmer';
       card.id = m.id;
 
 
@@ -667,7 +708,14 @@ const bio = document.createElement('div');
     // Scroll reveal
     const io = new IntersectionObserver((entries)=>{
       for(const e of entries){
-        if(e.isIntersecting) e.target.classList.add('is-in');
+        if(e.isIntersecting){
+          e.target.classList.add('is-in');
+          e.target.classList.add('is-view');
+        } else {
+          // keep the "is-in" state so the reveal doesn't replay,
+          // but pause shimmer when off-screen
+          e.target.classList.remove('is-view');
+        }
       }
     }, {threshold: 0.12});
 
