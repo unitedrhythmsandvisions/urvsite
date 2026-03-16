@@ -2,493 +2,255 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>United Rhythms and Visions presents The Rhythms of the Hearts band</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>United Rhythms and Visions presents The Rhythms of the Hearts Band</title>
   <style>
-    :root{
-      --bg0:#06060a;
-      --bg1:#0c1020;
-      --fg:#f6f7ff;
-      --muted:rgba(246,247,255,.75);
-      --glass:rgba(255,255,255,.08);
-      --glass2:rgba(255,255,255,.12);
-      --stroke:rgba(255,255,255,.18);
-      --shadow: 0 24px 60px rgba(0,0,0,.55);
-      --shadow2: 0 16px 40px rgba(0,0,0,.45);
-      --r:18px;
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
     body{
       margin:0;
-      color:var(--fg);
-      background:
-        radial-gradient(1100px 720px at 18% 6%, rgba(255,198,52,.28), transparent 60%),
-        radial-gradient(900px 640px at 92% 10%, rgba(0,173,255,.18), transparent 62%),
-        radial-gradient(900px 700px at 30% 96%, rgba(255,54,140,.14), transparent 64%),
-        radial-gradient(900px 650px at 90% 92%, rgba(0,186,120,.12), transparent 64%),
-        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 55%, #070711 100%);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      overflow-x:hidden;
+      background:#0b0b0f;
+      color:#f4f4f4;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height:1.5;
     }
 
-    .aurora{
-      position:fixed; inset:-20vmax;
-      pointer-events:none;
-      filter: blur(40px) saturate(1.25);
-      opacity:.38;
-      mix-blend-mode: screen;
-      animation: drift 18s ease-in-out infinite alternate;
-      background:
-        radial-gradient(closest-side at 20% 40%, rgba(255,206,60,.9), transparent 62%),
-        radial-gradient(closest-side at 75% 25%, rgba(0,215,255,.8), transparent 65%),
-        radial-gradient(closest-side at 62% 80%, rgba(255,60,160,.75), transparent 60%),
-        radial-gradient(closest-side at 35% 85%, rgba(95,255,160,.75), transparent 62%);
-    }
-    @keyframes drift{
-      from{transform: translate3d(-2%, -1%, 0) rotate(-3deg) scale(1.02)}
-      to{transform: translate3d(2%, 1.5%, 0) rotate(3deg) scale(1.06)}
+    .page{
+      width:92%;
+      max-width:1100px;
+      margin:0 auto;
+      padding:32px 0 48px;
     }
 
     .nav{
-      position:fixed;
-      top:18px;
-      right:18px;
-      z-index:50;
-      display:flex;
-      flex-direction:row;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      justify-content:flex-end;
-      padding:10px 12px;
-      border-radius:18px;
-      background:rgba(10,10,16,.58);
-      border:1px solid rgba(255,255,255,.18);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.45);
+      margin-bottom:24px;
+      text-align:right;
     }
+
     .nav a{
-      color:var(--fg);
+      color:#f4f4f4;
       text-decoration:none;
-      font-weight:800;
-      letter-spacing:.2px;
-      padding:10px 14px;
-      border-radius:999px;
-      position:relative;
-      isolation:isolate;
-      opacity:.92;
-      transition: transform .2s ease, opacity .2s ease;
+      margin-left:18px;
+      font-weight:bold;
+    }
+
+    .nav a:hover{ text-decoration:underline; }
+
+    .hero{ margin-bottom:36px; }
+
+    .logo-row{
+      overflow:hidden;
+      margin-bottom:24px;
+    }
+
+    .logo{
+      float:left;
+      width:130px;
+      margin-right:22px;
+    }
+
+    .logo img{
       display:block;
-      width:auto;
-      text-align:center;
-    }
-    .nav a::before{
-      content:"";
-      position:absolute; inset:0;
-      border-radius:999px;
-      background:
-        linear-gradient(90deg,
-          rgba(255,206,60,.35),
-          rgba(255,60,160,.26),
-          rgba(0,215,255,.20),
-          rgba(95,255,160,.22));
-      opacity:0;
-      transform: scale(.96);
-      transition: opacity .2s ease, transform .2s ease;
-      z-index:-1;
-    }
-    .nav a:hover{transform: translateY(-1px); opacity:1}
-    .nav a:hover::before{opacity:1; transform:scale(1)}
-
-    main{width:min(1200px, 92vw); margin:0 auto; padding:96px 0 96px}
-    section{padding:52px 0}
-    .section-title{
-      font-size: clamp(22px, 2.3vw, 30px);
-      margin:0 0 18px;
-      letter-spacing:.2px;
+      width:100%;
+      height:auto;
     }
 
-    .hero{
+    .title-block{
+      overflow:hidden;
       padding-top:10px;
     }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:18px;
-      align-items:start;
+
+    .eyebrow{
+      font-size:14px;
+      margin-bottom:4px;
+      color:#cccccc;
     }
 
-    .brand{
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      overflow: visible;
-      position:relative;
+    .main-title{
+      font-size:36px;
+      font-weight:bold;
+      line-height:1.1;
+      margin:0 0 8px;
     }
-    .brand-inner{padding:0}
 
-    .logo-row{display:flex; gap:24px; align-items:center; margin-bottom:14px}
-    .title-block{padding-top:20px;}
-    .logo{
-      width:150px;
-      height:auto;
-      background: transparent;
-      border:none;
-      border-radius:0;
-      display:block;
-      overflow:visible;
-      flex:0 0 auto;
-      filter: drop-shadow(0 16px 26px rgba(0,0,0,.22));
-    }
-    .logo img{width:100%; height:auto; object-fit:contain; display:block}
-
-    h1{
+    .sub-title{
+      font-size:28px;
+      font-weight:bold;
+      line-height:1.15;
       margin:0;
-      font-size: clamp(26px, 3vw, 40px);
-      line-height:1.07;
-      letter-spacing:.1px;
-      text-wrap:balance;
     }
 
-    .hero-sub{
-      margin:14px 0 0;
-      color:var(--muted);
-      font-size: 15px;
-      line-height:1.55;
+    .video-wrap{
+      margin-top:22px;
+      background:#111;
+      border:1px solid #2a2a2a;
+      padding:12px;
     }
 
-    .video-card{
-      border-radius: calc(var(--r) + 8px);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+    .video-embed{
       position:relative;
-    }
-
-    .video-frame{
-      aspect-ratio: 16/9;
       width:100%;
-      position:relative;
-      background: #000;
-      overflow:hidden;
-      cursor:pointer;
+      padding-top:56.25%;
+      background:#000;
     }
 
-    .poster{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
-      transform: scale(1.02);
-      filter: saturate(1.1) contrast(1.05);
-      transition: transform .45s ease, filter .45s ease;
-    }
-    .video-frame:hover .poster{transform: scale(1.07); filter:saturate(1.25) contrast(1.08)}
-
-    .poster-sheen{
-      position:absolute; inset:-30%;
-      background: linear-gradient(120deg,
-        transparent 20%,
-        rgba(255,255,255,.14) 35%,
-        rgba(255,255,255,.06) 55%,
-        transparent 70%);
-      transform: translateX(-35%) rotate(6deg);
-      opacity:0;
-      transition: opacity .25s ease;
-      pointer-events:none;
-    }
-    .video-frame:hover .poster-sheen{
-      opacity:1;
-      animation: sheen 1.2s ease forwards;
-    }
-    @keyframes sheen{
-      0%{transform: translateX(-35%) rotate(6deg)}
-      100%{transform: translateX(35%) rotate(6deg)}
-    }
-
-    .play{
+    .video-embed iframe{
       position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-      pointer-events:none;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      border:0;
     }
 
-    .play-btn{
-      width:84px; height:84px;
-      border-radius:999px;
-      background: rgba(6,6,10,.55);
-      border: 1px solid rgba(255,255,255,.22);
-      box-shadow: var(--shadow2);
-      display:grid;
-      place-items:center;
-      transform: translateY(0) rotate(0deg);
-      transition: transform .28s cubic-bezier(.2,.9,.2,1);
-      position:relative;
-      overflow:hidden;
+    h2{
+      font-size:28px;
+      margin:0 0 16px;
+      border-bottom:1px solid #333;
+      padding-bottom:8px;
     }
-
-    .play-btn::before{
-      content:"";
-      position:absolute; inset:-3px;
-      border-radius:999px;
-      background: conic-gradient(from 0deg,
-        rgba(255,206,60,.9),
-        rgba(255,60,160,.8),
-        rgba(0,215,255,.85),
-        rgba(95,255,160,.85),
-        rgba(255,206,60,.9));
-      filter: blur(.2px);
-      opacity:.55;
-      animation: spin 3.2s linear infinite;
-      mask: radial-gradient(circle at center, transparent 61%, #000 62%);
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    .video-frame:hover .play-btn{
-      transform: translateY(-7px) rotate(-6deg) scale(1.02);
-    }
-
-    .triangle{
-      width:0; height:0;
-      border-top: 14px solid transparent;
-      border-bottom: 14px solid transparent;
-      border-left: 22px solid rgba(246,247,255,.92);
-      transform: translateX(3px);
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,.35));
-    }
-
-    .video-meta{padding:14px 16px; color:var(--muted); font-size:14px; line-height:1.45}
 
     .contact{
-      border-radius: calc(var(--r) + 8px);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow: var(--shadow2);
-      padding:22px 20px;
+      margin-bottom:40px;
+      padding:16px;
+      background:#111;
+      border:1px solid #2a2a2a;
     }
-    .contact p{margin:0; font-size: 16px; line-height:1.5}
 
-    .band-wrap{
-      display:grid;
-      gap:14px;
-    }
+    .band-wrap{ margin-top:10px; }
 
     .card{
-      position:relative;
-      border-radius: calc(var(--r) + 10px);
-      background:
-        radial-gradient(800px 220px at 15% 10%, rgba(255,206,60,.18), transparent 60%),
-        radial-gradient(700px 260px at 85% 20%, rgba(0,215,255,.16), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.16);
-      box-shadow: var(--shadow2);
       overflow:hidden;
-    }
-
-    .card-inner{
-      display:grid;
-      grid-template-columns: 280px 1fr;
-      gap:18px;
-      padding:18px;
-      align-items:stretch;
-    }
-
-    @media (max-width: 860px){
-      .card-inner{display:block; overflow:hidden; padding:18px;}
-      .headshot{
-        float:left;
-        width:33% !important;
-        height:auto !important;
-        aspect-ratio:2/3;
-        min-height:0 !important;
-        margin:0 16px 10px 0;
-      }
-      .headshot img{
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        object-position:center 20%;
-      }
-    }
-
-    @media (max-width: 400px){
-      .headshot{float:none; width:100% !important; aspect-ratio:16/9; height:auto; min-height:0 !important; margin:0 0 14px 0;}
-      .headshot img{object-position:center 35%;}
+      margin-bottom:18px;
+      padding:16px;
+      background:#111;
+      border:1px solid #2a2a2a;
     }
 
     .headshot{
-      border-radius: calc(var(--r) + 8px);
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.18);
-      position:relative;
-      background:rgba(255,255,255,.06);
-      min-height: 320px;
+      float:left;
+      width:240px;
+      margin-right:18px;
+      margin-bottom:10px;
     }
-    .headshot img{width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.01); transition: transform .55s ease}
-    .card:hover .headshot img{transform:scale(1.08)}
+
+    .headshot img{
+      display:block;
+      width:100%;
+      height:auto;
+      border:1px solid #333;
+    }
+
     .bio h3{
-      margin:0 0 6px;
-      font-size: 22px;
-      letter-spacing:.15px;
-    }
-    .role{margin:0 0 12px; color:rgba(246,247,255,.82); font-weight:650}
-    .bio p.bio-par{
-      hyphens:auto;
-      text-align:justify;
-      margin:0 0 10px;
-      color: rgba(246,247,255,.80);
-      line-height:1.55;
-      font-size: 14.75px;
-      text-align: justify;
-      text-justify: inter-word;
-      hyphens: auto;
-      white-space: normal;
+      margin:0 0 4px;
+      font-size:24px;
     }
 
-    .reveal{
-      opacity:1;
-      transform: scale(.985);
-      filter: blur(3px) saturate(.95) contrast(.95);
-      transition: transform .7s ease, filter .8s ease;
-      will-change: transform, filter;
-    }
-    .reveal.is-in{
-      transform: scale(1);
-      filter: blur(0) saturate(1) contrast(1);
+    .role{
+      margin:0 0 12px;
+      font-weight:bold;
+      color:#d6d6d6;
     }
 
-    .shimmer{position:relative; isolation:isolate;}
-    .shimmer > *{position:relative; z-index:1;}
-    .shimmer::after{
+    .bio p{
+      margin:0 0 12px;
+      color:#e6e6e6;
+    }
+
+    .footer-image{ margin-top:28px; }
+
+    .footer-image img{
+      display:block;
+      width:100%;
+      height:auto;
+      border:1px solid #2a2a2a;
+    }
+
+    .clearfix:after{
       content:"";
-      position:absolute;
-      inset:-45%;
-      z-index:0;
-      pointer-events:none;
-      opacity:0;
-      filter: blur(14px);
-      background: linear-gradient(120deg,
-        transparent 42%,
-        rgba(255,255,255,.055) 50%,
-        transparent 58%);
-      transform: translate3d(-26%,0,0) rotate(8deg);
-      mix-blend-mode: screen;
-    }
-    .shimmer.is-view::after{
-      opacity:.9;
-      animation: shimmerMove 7.5s ease-in-out infinite;
-    }
-    @keyframes shimmerMove{
-      0%{transform: translate3d(-26%,0,0) rotate(8deg)}
-      100%{transform: translate3d(26%,0,0) rotate(8deg)}
+      display:block;
+      clear:both;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      .reveal{transition:none;}
-      .shimmer::after{animation:none !important; opacity:0 !important;}
-    }
+    @media (max-width: 700px){
+      .logo{
+        float:none;
+        width:120px;
+        margin:0 0 16px 0;
+      }
 
-    footer{
-      padding:30px 0 0;
-      color:rgba(246,247,255,.55);
-      font-size: 12px;
-    }
+      .title-block{
+        overflow:visible;
+        padding-top:0;
+      }
 
-    .anchor{scroll-margin-top: 96px;}
+      .main-title{ font-size:28px; }
+      .sub-title{ font-size:22px; }
+
+      .headshot{
+        float:none;
+        width:100%;
+        max-width:320px;
+        margin:0 0 14px 0;
+      }
+
+      .nav{ text-align:left; }
+
+      .nav a{
+        display:inline-block;
+        margin:0 12px 8px 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div aria-hidden="true" class="aurora"></div>
+  <div class="page">
+    <div class="nav">
+      <a href="#top">Home</a>
+      <a href="#contact">Contact</a>
+      <a href="#band">The Band</a>
+    </div>
 
-  <nav aria-label="Page" class="nav">
-    <a href="#top">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#band">The Band</a>
-  </nav>
-
-  <main class="anchor" id="top">
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="brand reveal shimmer">
-          <div class="brand-inner">
-            <div class="logo-row" style="align-items:flex-start; gap:32px">
-              <div aria-hidden="true" class="logo">
-                <img alt="United Rhythms and Visions" src="united-rhythms--logo.png"/>
-              </div>
-              <div class="title-block">
-                <div style="font-weight:950; letter-spacing:.6px; font-size:clamp(22px, 3.1vw, 44px); line-height:1.03">UNITED RHYTHMS AND VISIONS</div>
-                <div style="margin-top:6px; font-weight:800; letter-spacing:.3px; opacity:.78; font-size:14px">presents</div>
-                <div style="margin-top:8px; font-weight:950; letter-spacing:.5px; font-size:clamp(20px, 2.6vw, 36px); line-height:1.05">THE RHYTHMS OF THE HEARTS BAND</div>
-              </div>
-            </div>
-          </div>
+    <div class="hero" id="top">
+      <div class="logo-row clearfix">
+        <div class="logo">
+          <img src="united-rhythms--logo.png" alt="United Rhythms and Visions" width="320" height="320"/>
         </div>
-
-        <div class="video-card reveal shimmer" id="video-card">
-          <div aria-label="Play video" class="video-frame" id="video-frame" role="button" tabindex="0">
-            <img alt="Video poster" class="poster" src="TheBand16x9.jpg"/>
-            <div aria-hidden="true" class="poster-sheen"></div>
-            <div aria-hidden="true" class="play">
-              <div class="play-btn" id="play-btn">
-                <div class="triangle"></div>
-              </div>
-            </div>
-          </div>
-          <div class="video-meta"> </div>
+        <div class="title-block">
+          <div class="main-title">UNITED RHYTHMS AND VISIONS</div>
+          <div class="eyebrow">presents</div>
+          <div class="sub-title">THE RHYTHMS OF THE HEARTS BAND</div>
         </div>
       </div>
-    </section>
 
-    <section class="anchor" id="contact">
-      <h2 class="section-title reveal">Contact</h2>
-      <div class="contact reveal shimmer">
-        <p>For bookings, contact Luis de Jesús at 732-632-7214</p>
+      <div class="video-wrap">
+        <div class="video-embed">
+          <iframe
+            src="https://www.youtube.com/embed/Cx9Ib4IaeMI?rel=0&modestbranding=1"
+            title="The Rhythms of the Hearts Band"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <section class="anchor" id="band">
-      <h2 class="section-title reveal">The Band</h2>
+    <div id="contact">
+      <h2>Contact</h2>
+      <div class="contact">
+        For bookings, contact Luis de Jesús at 732-632-7214
+      </div>
+    </div>
+
+    <div id="band">
+      <h2>The Band</h2>
       <div class="band-wrap" id="band-wrap"></div>
-    </section>
+    </div>
 
-    <footer>
-      <div style="height:18px"></div>
-      <div style="margin-top:28px">
-        <img src="band-stage-wide.jpg" alt="The Band (stage)" style="width:100%; height:auto; border-radius: calc(var(--r) + 8px); border:1px solid rgba(255,255,255,.16); box-shadow: var(--shadow);"/>
-      </div>
-    </footer>
-  </main>
+    <div class="footer-image">
+      <img src="band-stage-wide.jpg" alt="The Band (stage)" loading="lazy" width="1200" height="383"/>
+    </div>
+  </div>
 
   <script>
-    // YouTube embed
-    const YOUTUBE_URL = "https://www.youtube.com/embed/Cx9Ib4IaeMI?autoplay=1&rel=0&modestbranding=1&playsinline=1";
-
-    const videoFrame = document.getElementById('video-frame');
-
-    function mountYouTube(){
-      const iframe = document.createElement('iframe');
-      iframe.src = YOUTUBE_URL;
-      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-      iframe.setAttribute('allowfullscreen', '');
-      iframe.style.position = 'absolute';
-      iframe.style.inset = '0';
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = '0';
-
-      videoFrame.innerHTML = "";
-      videoFrame.style.cursor = 'auto';
-      videoFrame.appendChild(iframe);
-    }
-
-    videoFrame.addEventListener('click', mountYouTube);
-    videoFrame.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' ') mountYouTube();
-    });
-
     const membersRaw = [
       {
         name: "Luis de Jesús",
@@ -524,9 +286,9 @@ Today, Cheo brings his rich experience, deep groove, and spiritual passion to Rh
         img: "Jose-Austin.jpg",
         bio: `Jose Austin is a dynamic guitarist whose musical journey began early, shaped by his father’s love of guitar and the soulful sounds of the blues. Born in Guatemala and adopted into the U.S. at just nine months old, Jose grew up surrounded by music, with B.B. King’s Bluesville playing in the house and a guitar always close at hand.
 
-        He first picked up the ukulele at sixteen before quickly transitioning to guitar, where his passion truly took off. Driven by a love of learning songs by ear and channeling the artists who inspired him, Jose spent years honing his craft before stepping onto the live scene at his first open jam. That leap led him to Luis and eventually to The Rhythm of the Hearts Band, where he was introduced to polyrhythms and Latin music (an experience that expanded his sound and transformed his approach as a musician).
+He first picked up the ukulele at sixteen before quickly transitioning to guitar, where his passion truly took off. Driven by a love of learning songs by ear and channeling the artists who inspired him, Jose spent years honing his craft before stepping onto the live scene at his first open jam. That leap led him to Luis and eventually to The Rhythm of the Hearts Band, where he was introduced to polyrhythms and Latin music (an experience that expanded his sound and transformed his approach as a musician).
 
-        Now a proud member of The Rhythm of the Hearts Band, Jose brings heart, growth, and gratitude to every performance. Excited for what’s ahead, he continues to evolve as an artist while creating powerful music alongside a talented collective of musicians.`
+Now a proud member of The Rhythm of the Hearts Band, Jose brings heart, growth, and gratitude to every performance. Excited for what’s ahead, he continues to evolve as an artist while creating powerful music alongside a talented collective of musicians.`
       },
       {
         name: "Andrew Rosenkilde",
@@ -628,71 +390,18 @@ He studied music theory at Hunter College and built on the foundation he learned
         .trim()
         .replace(/\s+/g,'-');
     }
-    membersRaw.forEach(m=> m.id = 'm-' + slugId(m.name));
 
-    const bandWrap = document.getElementById('band-wrap');
-
-    function memberCard(m){
-      const card = document.createElement('article');
-      card.className = 'card reveal shimmer';
-      card.id = m.id;
-
-      const inner = document.createElement('div');
-      inner.className = 'card-inner';
-
-      const head = document.createElement('div');
-      head.className = 'headshot';
-
-      const img = document.createElement('img');
-      img.src = m.img;
-      img.alt = m.name;
-      head.appendChild(img);
-
-      const bio = document.createElement('div');
-      bio.className = 'bio';
-
-      const h3 = document.createElement('h3');
-      h3.textContent = m.name;
-
-      const role = document.createElement('p');
-      role.className = 'role';
-      role.textContent = m.role;
-
-      function cleanBioText(s){
-        return (s || "")
-          .replace(/\r\n/g, "\n")
-          .replace(/\r/g, "\n")
-          .replace(/\u00A0/g, " ")
-          .split("\n")
-          .map(line => line.replace(/[ \t]{2,}/g, " ").replace(/\s+$/g, ""))
-          .join("\n")
-          .trim();
-      }
-
-      const cleaned = cleanBioText(m.bio);
-      const parts = cleaned.split(/\n\s*\n/);
-
-      bio.appendChild(h3);
-      bio.appendChild(role);
-
-      parts.forEach(block=>{
-        const p = document.createElement('p');
-        p.className = 'bio-par';
-
-        const lines = block.split(/\n/);
-        lines.forEach((ln, idx)=>{
-          p.appendChild(document.createTextNode(ln));
-          if(idx < lines.length - 1) p.appendChild(document.createElement('br'));
-        });
-
-        bio.appendChild(p);
-      });
-
-      inner.appendChild(head);
-      inner.appendChild(bio);
-
-      card.appendChild(inner);
-      return card;
+    function cleanBioText(s){
+      return (s || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/\u00A0/g, " ")
+        .split("\n")
+        .map(function(line){
+          return line.replace(/[ \t]{2,}/g, " ").replace(/\s+$/g, "");
+        })
+        .join("\n")
+        .trim();
     }
 
     function lastName(name){
@@ -701,33 +410,60 @@ He studied music theory at Hunter College and built on the foundation he learned
       return (parts[parts.length - 1] || "").toLowerCase();
     }
 
-    const luis = membersRaw.find(m => m.name === "Luis de Jesús");
-    const jeremy = membersRaw.find(m => m.name === "Jeremy Leon");
+    const luis = membersRaw.find(function(m){ return m.name === "Luis de Jesús"; });
+    const jeremy = membersRaw.find(function(m){ return m.name === "Jeremy Leon"; });
 
     const rest = membersRaw
-      .filter(m => m !== luis && m !== jeremy)
-      .sort((a, b) => lastName(a.name).localeCompare(lastName(b.name)));
+      .filter(function(m){ return m !== luis && m !== jeremy; })
+      .sort(function(a, b){
+        return lastName(a.name).localeCompare(lastName(b.name));
+      });
 
-    const members = [
-      ...(luis ? [luis] : []),
-      ...(jeremy ? [jeremy] : []),
-      ...rest
-    ];
+    const members = []
+      .concat(luis ? [luis] : [])
+      .concat(jeremy ? [jeremy] : [])
+      .concat(rest);
 
-    members.forEach(m => bandWrap.appendChild(memberCard(m)));
+    const bandWrap = document.getElementById("band-wrap");
 
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        if(e.isIntersecting){
-          e.target.classList.add('is-in');
-          e.target.classList.add('is-view');
-        } else {
-          e.target.classList.remove('is-view');
-        }
-      }
-    }, {threshold: 0.12});
+    members.forEach(function(m){
+      const card = document.createElement("div");
+      card.className = "card clearfix";
+      card.id = "m-" + slugId(m.name);
 
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      const headshot = document.createElement("div");
+      headshot.className = "headshot";
+
+      const img = document.createElement("img");
+      img.src = m.img;
+      img.alt = m.name;
+      img.loading = "lazy";
+      headshot.appendChild(img);
+
+      const bio = document.createElement("div");
+      bio.className = "bio";
+
+      const h3 = document.createElement("h3");
+      h3.appendChild(document.createTextNode(m.name));
+
+      const role = document.createElement("div");
+      role.className = "role";
+      role.appendChild(document.createTextNode(m.role));
+
+      bio.appendChild(h3);
+      bio.appendChild(role);
+
+      const parts = cleanBioText(m.bio).split(/\n\s*\n/);
+      parts.forEach(function(block){
+        const p = document.createElement("p");
+        p.appendChild(document.createTextNode(block.replace(/\n/g, " ")));
+        bio.appendChild(p);
+      });
+
+      card.appendChild(headshot);
+      card.appendChild(bio);
+      bandWrap.appendChild(card);
+    });
   </script>
 </body>
 </html>
