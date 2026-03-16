@@ -5,17 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>United Rhythms and Visions presents The Rhythms of the Hearts Band</title>
   <style>
+    html{
+      background:#0a0a0d;
+    }
+
     body{
       margin:0;
-      background:#0b0b0f;
       color:#f4f4f4;
       font-family: Arial, Helvetica, sans-serif;
       line-height:1.5;
+      background-color:#0a0a0d;
+      position:relative;
+      z-index:0;
+    }
+
+    body:before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:
+        radial-gradient(1100px 720px at 18% 6%, rgba(255,198,52,.30), transparent 58%),
+        radial-gradient(800px 540px at 82% 14%, rgba(255,170,40,.14), transparent 56%),
+        radial-gradient(900px 700px at 30% 96%, rgba(140,90,20,.10), transparent 62%),
+        linear-gradient(180deg, #040404 0%, #0a0a0d 55%, #070707 100%);
+      background-color:#0a0a0d;
+    }
+
+    a,
+    a:visited,
+    a:active{
+      color:#8fc8ff;
+    }
+
+    a:hover,
+    a:focus{
+      color:#b7dcff;
+    }
+
+    a[x-apple-data-detectors],
+    a[x-apple-data-detectors]:visited,
+    a[x-apple-data-detectors]:hover,
+    a[x-apple-data-detectors]:active{
+      color:#8fc8ff !important;
+      text-decoration:none !important;
     }
 
     .page{
-      width:92%;
-      max-width:1100px;
+      width:min(1100px, 92vw);
       margin:0 auto;
       padding:32px 0 48px;
     }
@@ -32,9 +70,15 @@
       font-weight:bold;
     }
 
-    .nav a:hover{ text-decoration:underline; }
+    .nav a:hover,
+    .nav a:focus{
+      color:#ffffff;
+      text-decoration:underline;
+    }
 
-    .hero{ margin-bottom:36px; }
+    .hero{
+      margin-bottom:36px;
+    }
 
     .logo-row{
       overflow:hidden;
@@ -69,6 +113,7 @@
       font-weight:bold;
       line-height:1.1;
       margin:0 0 8px;
+      letter-spacing:.02em;
     }
 
     .sub-title{
@@ -76,53 +121,103 @@
       font-weight:bold;
       line-height:1.15;
       margin:0;
+      letter-spacing:.01em;
+    }
+
+    .video-wrap,
+    .contact,
+    .card{
+      background:rgba(17,17,17,.92);
+      border:1px solid rgba(255,196,90,.18);
+      border-radius:14px;
     }
 
     .video-wrap{
       margin-top:22px;
-      background:#111;
-      border:1px solid #2a2a2a;
       padding:12px;
     }
 
-    .video-embed{
+    .video-link{
+      display:block;
       position:relative;
-      width:100%;
-      padding-top:56.25%;
       background:#000;
+      text-decoration:none;
+      overflow:hidden;
+      border-radius:10px;
     }
 
-    .video-embed iframe{
-      position:absolute;
-      top:0;
-      left:0;
+    .video-poster{
+      display:block;
       width:100%;
-      height:100%;
-      border:0;
+      height:auto;
+    }
+
+    .video-overlay{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.18);
+    }
+
+    .play-btn{
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:84px;
+      height:84px;
+      margin-left:-42px;
+      margin-top:-42px;
+      border-radius:50%;
+      background:rgba(0,0,0,.72);
+      border:2px solid rgba(255,255,255,.9);
+    }
+
+    .play-btn:before{
+      content:"";
+      position:absolute;
+      top:50%;
+      left:50%;
+      margin-left:-8px;
+      margin-top:-14px;
+      width:0;
+      height:0;
+      border-top:14px solid transparent;
+      border-bottom:14px solid transparent;
+      border-left:22px solid #fff;
+    }
+
+    .video-label{
+      position:absolute;
+      left:14px;
+      bottom:12px;
+      color:#fff;
+      background:rgba(0,0,0,.65);
+      padding:6px 10px;
+      font-size:14px;
+      border-radius:4px;
     }
 
     h2{
       font-size:28px;
       margin:0 0 16px;
-      border-bottom:1px solid #333;
+      border-bottom:1px solid rgba(255,196,90,.18);
       padding-bottom:8px;
     }
 
     .contact{
       margin-bottom:40px;
-      padding:16px;
-      background:#111;
-      border:1px solid #2a2a2a;
+      padding:16px 18px;
+      font-size:18px;
+      line-height:1.6;
     }
 
-    .band-wrap{ margin-top:10px; }
+    .band-wrap{
+      margin-top:10px;
+    }
 
     .card{
       overflow:hidden;
       margin-bottom:18px;
       padding:16px;
-      background:#111;
-      border:1px solid #2a2a2a;
     }
 
     .headshot{
@@ -137,11 +232,13 @@
       width:100%;
       height:auto;
       border:1px solid #333;
+      border-radius:10px;
     }
 
     .bio h3{
       margin:0 0 4px;
       font-size:24px;
+      line-height:1.2;
     }
 
     .role{
@@ -153,21 +250,45 @@
     .bio p{
       margin:0 0 12px;
       color:#e6e6e6;
+      font-size:16px;
     }
 
-    .footer-image{ margin-top:28px; }
+    .footer-image{
+      margin-top:28px;
+    }
 
     .footer-image img{
       display:block;
       width:100%;
       height:auto;
-      border:1px solid #2a2a2a;
+      border:1px solid rgba(255,196,90,.18);
+      border-radius:14px;
     }
 
     .clearfix:after{
       content:"";
       display:block;
       clear:both;
+    }
+
+    @media (max-width: 860px){
+      .page{
+        width:min(94vw, 1100px);
+        padding-top:24px;
+      }
+
+      .nav{
+        text-align:left;
+      }
+
+      .nav a{
+        display:inline-block;
+        margin:0 14px 10px 0;
+      }
+
+      .headshot{
+        width:210px;
+      }
     }
 
     @media (max-width: 700px){
@@ -182,21 +303,94 @@
         padding-top:0;
       }
 
-      .main-title{ font-size:28px; }
-      .sub-title{ font-size:22px; }
+      .main-title{
+        font-size:28px;
+      }
+
+      .sub-title{
+        font-size:22px;
+      }
+
+      .video-wrap,
+      .contact,
+      .card{
+        border-radius:12px;
+      }
+
+      .card{
+        padding:14px;
+      }
+
+      .headshot{
+        float:left;
+        width:38%;
+        max-width:none;
+        min-width:120px;
+        margin:0 14px 10px 0;
+      }
+
+      .bio h3{
+        font-size:22px;
+      }
+
+      .bio p{
+        font-size:15px;
+      }
+    }
+
+    @media (max-width: 480px){
+      .page{
+        width:94vw;
+        padding-top:18px;
+      }
+
+      .main-title{
+        font-size:24px;
+      }
+
+      .sub-title{
+        font-size:20px;
+      }
+
+      h2{
+        font-size:24px;
+      }
+
+      .contact{
+        font-size:17px;
+      }
+
+      .video-wrap{
+        padding:10px;
+      }
+
+      .play-btn{
+        width:68px;
+        height:68px;
+        margin-left:-34px;
+        margin-top:-34px;
+      }
+
+      .play-btn:before{
+        margin-left:-7px;
+        margin-top:-11px;
+        border-top:11px solid transparent;
+        border-bottom:11px solid transparent;
+        border-left:18px solid #fff;
+      }
+
+      .video-label{
+        left:10px;
+        bottom:10px;
+        font-size:12px;
+        padding:5px 8px;
+      }
 
       .headshot{
         float:none;
         width:100%;
-        max-width:320px;
+        max-width:340px;
         margin:0 0 14px 0;
-      }
-
-      .nav{ text-align:left; }
-
-      .nav a{
-        display:inline-block;
-        margin:0 12px 8px 0;
       }
     }
   </style>
@@ -212,7 +406,7 @@
     <div class="hero" id="top">
       <div class="logo-row clearfix">
         <div class="logo">
-          <img src="united-rhythms--logo.png" alt="United Rhythms and Visions" width="320" height="320"/>
+          <img src="united-rhythms--logo.png" alt="United Rhythms and Visions"/>
         </div>
         <div class="title-block">
           <div class="main-title">UNITED RHYTHMS AND VISIONS</div>
@@ -222,14 +416,12 @@
       </div>
 
       <div class="video-wrap">
-        <div class="video-embed">
-          <iframe
-            src="https://www.youtube.com/embed/Cx9Ib4IaeMI?rel=0&modestbranding=1"
-            title="The Rhythms of the Hearts Band"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
+        <a class="video-link" href="https://youtu.be/Cx9Ib4IaeMI" target="_blank" rel="noopener noreferrer" aria-label="Watch video on YouTube">
+          <img class="video-poster" src="TheBand16x9.jpg" alt="Watch video on YouTube">
+          <div class="video-overlay" aria-hidden="true"></div>
+          <div class="play-btn" aria-hidden="true"></div>
+          <div class="video-label">Watch on YouTube</div>
+        </a>
       </div>
     </div>
 
@@ -246,7 +438,7 @@
     </div>
 
     <div class="footer-image">
-      <img src="band-stage-wide.jpg" alt="The Band (stage)" loading="lazy" width="1200" height="383"/>
+      <img src="band-stage-wide.jpg" alt="The Band (stage)" loading="lazy"/>
     </div>
   </div>
 
@@ -256,39 +448,25 @@
         name: "Luis de Jesús",
         role: "Composer, Arranger, Multi-Instrumentalist",
         img: "Luis-de-Jesus.jpg",
-        bio: `Luis De Jesús is a composer, arranger, and multi-instrumentalist whose work bridges tradition, innovation, and cultural storytelling. Trained across a remarkable range of disciplines (from jazz guitar, Puerto Rican cuatro, conga and barril drums to charango, Chinese harp, and classical Indian music), he brings a richly global perspective to every performance and composition. As Executive Director of United Rhythms and Visions, he has spent decades designing and leading arts programs that inspire creativity, diversity, and connection through music, rhythm, and interdisciplinary expression. A dynamic educator and producer as well as a seasoned performer, Luis is known for creating music that is both deeply rooted and vibrantly alive.
-
-Luis de Jesús is also the Executive Director of United Rhythms and Visions, where he has spent decades using the arts to inspire learning, inclusion, and community connection. Since 1999, he has led innovative interdisciplinary programs for schools and youth, blending music, storytelling, visual arts, and cultural education to promote acceptance, harmony, and diversity. A multidisciplinary artist and educator with deep training in music, visual arts, and performance traditions, Luis brings a rare mix of creative vision and hands-on leadership to every project. His work reflects a lifelong commitment to empowering young people through the transformative power of the arts.`
+        bio: `Luis De Jesús is a composer, arranger, and multi-instrumentalist whose work bridges tradition, innovation, and cultural storytelling. Trained across a remarkable range of disciplines (from jazz guitar, Puerto Rican cuatro, conga and barril drums to charango, Chinese harp, and classical Indian music), he brings a richly global perspective to every performance and composition. As Executive Director of United Rhythms and Visions, he has spent decades designing and leading arts programs that inspire creativity, diversity, and connection through music, rhythm, and interdisciplinary expression. A dynamic educator and producer as well as a seasoned performer, Luis is known for creating music that is both deeply rooted and vibrantly alive.\n\nLuis de Jesús is also the Executive Director of United Rhythms and Visions, where he has spent decades using the arts to inspire learning, inclusion, and community connection. Since 1999, he has led innovative interdisciplinary programs for schools and youth, blending music, storytelling, visual arts, and cultural education to promote acceptance, harmony, and diversity. A multidisciplinary artist and educator with deep training in music, visual arts, and performance traditions, Luis brings a rare mix of creative vision and hands-on leadership to every project. His work reflects a lifelong commitment to empowering young people through the transformative power of the arts.`
       },
       {
         name: "Jeremy Leon",
         role: "Music Director",
         img: "Jeremy-Leon.jpg",
-        bio: `Currently based in New Jersey, Montreal native Jeremy Leon is making his name in the East Coast scene as a dynamic new performer and composer in the jazz tradition. He has caught the attention of many as a torchbearer for impassioned artistic practice among Canadian jazz's up-and-comers, as a bandleader, featured soloist, and sideman. Jeremy's broad tone and fresh sense of phrasing have been heard in performances across Quebec with mainstays of the scene, such as Alexandre Côté, Jean-Pierre Zanella, Alex Bellegarde, Caity Gyorgy and countless others.
-
-He has performed in concert venues all across the Eastern Seaboard, from New Jersey to New York, Pennsylvania, Connecticut, Quebec and Ontario. Jeremy's original compositions never fail to catch the listener's ear whilst paying homage to his inspirations: John Coltrane, Sonny Rollins and Joe Henderson. His debut album as a leader, Affinity, was released to positive press in March 2024. He has also performed in award-winning acts on the periphery of the jazz idiom, like Rau_ze and Diogo Ramos.
-
-Jeremy recently obtained his masters degree in Jazz Studies from the Mason Gross School of the Arts at Rutgers University, studying with mainstays of the New York jazz scene, such as Abraham Burton, Ralph Bowen, Conrad Herwig, and Robby Ameen. At McGill University, he was the recipient of the David Holt Award for excellence in the field of jazz studies, and studying with Camille Thurman, Rémi Bolduc and Frank Lozano.`
+        bio: `Currently based in New Jersey, Montreal native Jeremy Leon is making his name in the East Coast scene as a dynamic new performer and composer in the jazz tradition. He has caught the attention of many as a torchbearer for impassioned artistic practice among Canadian jazz's up-and-comers, as a bandleader, featured soloist, and sideman. Jeremy's broad tone and fresh sense of phrasing have been heard in performances across Quebec with mainstays of the scene, such as Alexandre Côté, Jean-Pierre Zanella, Alex Bellegarde, Caity Gyorgy and countless others.\n\nHe has performed in concert venues all across the Eastern Seaboard, from New Jersey to New York, Pennsylvania, Connecticut, Quebec and Ontario. Jeremy's original compositions never fail to catch the listener's ear whilst paying homage to his inspirations: John Coltrane, Sonny Rollins and Joe Henderson. His debut album as a leader, Affinity, was released to positive press in March 2024. He has also performed in award-winning acts on the periphery of the jazz idiom, like Rau_ze and Diogo Ramos.\n\nJeremy recently obtained his masters degree in Jazz Studies from the Mason Gross School of the Arts at Rutgers University, studying with mainstays of the New York jazz scene, such as Abraham Burton, Ralph Bowen, Conrad Herwig, and Robby Ameen. At McGill University, he was the recipient of the David Holt Award for excellence in the field of jazz studies, and studying with Camille Thurman, Rémi Bolduc and Frank Lozano.`
       },
       {
         name: 'José "Cheo" Aponte',
         role: "Multi-percussionist",
         img: "Cheo-Aponte.jpg",
-        bio: `José “Cheo” Aponte is a seasoned multi-percussionist whose rhythm-driven journey began in the Bronx, New York, when he started playing at age 16. Largely self-taught, Cheo developed his craft through passion, instinct, and the priceless opportunity to learn by playing alongside greats like neighborhood legend Cachete Maldonado.
-
-Music runs deep in his roots. His mother sang on the radio, and his cousin was an original member, composer, saxophonist, and singer for the iconic El Gran Combo de Puerto Rico. Over the years, Cheo has performed with a wide range of bands and artists, studied in a percussion workshop with the legendary Max Roach at the University of Massachusetts, and shared musical experiences with notable names like Archie Shepp and Vishnu Woods. He also did studio work during the disco era and performed with Gary Nuñez of Plena Libre and Sunshine Logroño as part of Moliendo Vidrio.
-
-Today, Cheo brings his rich experience, deep groove, and spiritual passion to Rhythm of the Hearts, using music and song as both expression and praise.`
+        bio: `José “Cheo” Aponte is a seasoned multi-percussionist whose rhythm-driven journey began in the Bronx, New York, when he started playing at age 16. Largely self-taught, Cheo developed his craft through passion, instinct, and the priceless opportunity to learn by playing alongside greats like neighborhood legend Cachete Maldonado.\n\nMusic runs deep in his roots. His mother sang on the radio, and his cousin was an original member, composer, saxophonist, and singer for the iconic El Gran Combo de Puerto Rico. Over the years, Cheo has performed with a wide range of bands and artists, studied in a percussion workshop with the legendary Max Roach at the University of Massachusetts, and shared musical experiences with notable names like Archie Shepp and Vishnu Woods. He also did studio work during the disco era and performed with Gary Nuñez of Plena Libre and Sunshine Logroño as part of Moliendo Vidrio.\n\nToday, Cheo brings his rich experience, deep groove, and spiritual passion to Rhythm of the Hearts, using music and song as both expression and praise.`
       },
       {
         name: "Jose Austin",
         role: "Guitarist",
         img: "Jose-Austin.jpg",
-        bio: `Jose Austin is a dynamic guitarist whose musical journey began early, shaped by his father’s love of guitar and the soulful sounds of the blues. Born in Guatemala and adopted into the U.S. at just nine months old, Jose grew up surrounded by music, with B.B. King’s Bluesville playing in the house and a guitar always close at hand.
-
-He first picked up the ukulele at sixteen before quickly transitioning to guitar, where his passion truly took off. Driven by a love of learning songs by ear and channeling the artists who inspired him, Jose spent years honing his craft before stepping onto the live scene at his first open jam. That leap led him to Luis and eventually to The Rhythm of the Hearts Band, where he was introduced to polyrhythms and Latin music (an experience that expanded his sound and transformed his approach as a musician).
-
-Now a proud member of The Rhythm of the Hearts Band, Jose brings heart, growth, and gratitude to every performance. Excited for what’s ahead, he continues to evolve as an artist while creating powerful music alongside a talented collective of musicians.`
+        bio: `Jose Austin is a dynamic guitarist whose musical journey began early, shaped by his father’s love of guitar and the soulful sounds of the blues. Born in Guatemala and adopted into the U.S. at just nine months old, Jose grew up surrounded by music, with B.B. King’s Bluesville playing in the house and a guitar always close at hand.\n\nHe first picked up the ukulele at sixteen before quickly transitioning to guitar, where his passion truly took off. Driven by a love of learning songs by ear and channeling the artists who inspired him, Jose spent years honing his craft before stepping onto the live scene at his first open jam. That leap led him to Luis and eventually to The Rhythm of the Hearts Band, where he was introduced to polyrhythms and Latin music (an experience that expanded his sound and transformed his approach as a musician).\n\nNow a proud member of The Rhythm of the Hearts Band, Jose brings heart, growth, and gratitude to every performance. Excited for what’s ahead, he continues to evolve as an artist while creating powerful music alongside a talented collective of musicians.`
       },
       {
         name: "Andrew Rosenkilde",
@@ -300,23 +478,13 @@ Now a proud member of The Rhythm of the Hearts Band, Jose brings heart, growth, 
         name: "Anthony Salvador Lewis",
         role: "Vocalist",
         img: "Anthony-Salvador-Lewis.jpg",
-        bio: `Anthony Salvador Lewis’s path to the stage began with a sudden pivot. A serious knee injury (sustained while he was a standout running back at a Central Jersey high school) forced him to step away from dreams of Olympic competition as a world-class high hurdler and a future in the NFL. At the urging of his mother (who could see he was uninspired by a college business major), Anthony discovered a new kind of purpose: singing and acting (especially in the theater).
-
-What followed were years of hard-earned, unpredictable, and unforgettable work in show business. Anthony built a reputation as a dynamic actor, a frontman for New Jersey club bands, and a popular solo performer, including performances for Filipino audiences in the U.S. and abroad. His single “Amsterdam” can be heard on major streaming platforms.
-
-A graduate of the Lee Strasberg Theatre & Film Institute and HB Studio in New York City, Anthony has appeared in guest and co-starring roles on television series including The Blacklist, Billions, and Comedy Central’s Chappelle’s Show and Alternatino (as the Shaman Utuqiel). He has shared the screen with acclaimed actors such as James Spader, Paul Giamatti, Arturo Castro, and Edie Falco.
-
-Anthony considers it a true honor to work with the consummate artist, composer, and song sculptor Luis de Jesús and his dedicated, handpicked ensemble of top-caliber musicians.`
+        bio: `Anthony Salvador Lewis’s path to the stage began with a sudden pivot. A serious knee injury (sustained while he was a standout running back at a Central Jersey high school) forced him to step away from dreams of Olympic competition as a world-class high hurdler and a future in the NFL. At the urging of his mother (who could see he was uninspired by a college business major), Anthony discovered a new kind of purpose: singing and acting (especially in the theater).\n\nWhat followed were years of hard-earned, unpredictable, and unforgettable work in show business. Anthony built a reputation as a dynamic actor, a frontman for New Jersey club bands, and a popular solo performer, including performances for Filipino audiences in the U.S. and abroad. His single “Amsterdam” can be heard on major streaming platforms.\n\nA graduate of the Lee Strasberg Theatre & Film Institute and HB Studio in New York City, Anthony has appeared in guest and co-starring roles on television series including The Blacklist, Billions, and Comedy Central’s Chappelle’s Show and Alternatino (as the Shaman Utuqiel). He has shared the screen with acclaimed actors such as James Spader, Paul Giamatti, Arturo Castro, and Edie Falco.\n\nAnthony considers it a true honor to work with the consummate artist, composer, and song sculptor Luis de Jesús and his dedicated, handpicked ensemble of top-caliber musicians.`
       },
       {
         name: "Breeze Waker",
         role: "Drummer",
         img: "Breeze-Waker.jpg",
-        bio: `Breeze Waker is a seasoned drummer whose love of music started young, inspired by family records, television performers, and a lifelong dream of playing the stage with a great band. Deeply rooted in the sounds of the ’50s, ’60s, and ’70s, Breeze brings a rich, versatile style shaped by blues, rock ’n’ roll, soul, funk, fusion, jazz, reggae, and R&B.
-
-Over the years, he has played with a wide range of local bands and recording artists, including Bill Carter Blues Project, The Mighty Tone Masters, Special Occasion, The Street People, Nu-Era, The Mighty Strokes, Love Epidemic Band, Sonny & Company, No Regrets Band, Gus Bardaji Band, and Willie Mitchell collaborations. His performance history includes sharing stages with legendary acts such as The Persuaders, Hugh Masekela, Blue Magic, Harold Melvin & The Blue Notes, Johnny Clyde Copeland, Snooky Pryor, Homesick James, and Dave Valentin.
-
-From 2000 to 2009, Breeze led his own group, The Breeze Waker Band, featuring Ms. Frankie Bell, known as the Princess of the Blues, and performed in standout events including the Jersey Shore Jazz & Blues Foundation competition at the Wonder Bar in Asbury Park. Today, he continues to keep the groove alive with Ms. G & Da Guys, The Rhythms of the Hearts Band, and The Nu Men of Soul, delivering classic soul and R&B with the power and experience only a true veteran can bring.`
+        bio: `Breeze Waker is a seasoned drummer whose love of music started young, inspired by family records, television performers, and a lifelong dream of playing the stage with a great band. Deeply rooted in the sounds of the ’50s, ’60s, and ’70s, Breeze brings a rich, versatile style shaped by blues, rock ’n’ roll, soul, funk, fusion, jazz, reggae, and R&B.\n\nOver the years, he has played with a wide range of local bands and recording artists, including Bill Carter Blues Project, The Mighty Tone Masters, Special Occasion, The Street People, Nu-Era, The Mighty Strokes, Love Epidemic Band, Sonny & Company, No Regrets Band, Gus Bardaji Band, and Willie Mitchell collaborations. His performance history includes sharing stages with legendary acts such as The Persuaders, Hugh Masekela, Blue Magic, Harold Melvin & The Blue Notes, Johnny Clyde Copeland, Snooky Pryor, Homesick James, and Dave Valentin.\n\nFrom 2000 to 2009, Breeze led his own group, The Breeze Waker Band, featuring Ms. Frankie Bell, known as the Princess of the Blues, and performed in standout events including the Jersey Shore Jazz & Blues Foundation competition at the Wonder Bar in Asbury Park. Today, he continues to keep the groove alive with Ms. G & Da Guys, The Rhythms of the Hearts Band, and The Nu Men of Soul, delivering classic soul and R&B with the power and experience only a true veteran can bring.`
       },
       {
         name: "Caleb Eckstein",
@@ -328,45 +496,31 @@ From 2000 to 2009, Breeze led his own group, The Breeze Waker Band, featuring Ms
         name: "Carlos Hernandez",
         role: "Trumpetist",
         img: "carlos-hernandez.jpg",
-        bio: `Carlos Hernandez is a rising trumpetist and dedicated educator, currently in his fifth year at Rutgers Mason Gross School of the Arts, where he is pursuing dual majors in Music Education and Jazz Studies. A versatile performer, he has spent the past four years making his mark in the Rutgers Marching Band, jazz ensemble, concert band, brass band, and pep band.
-
-As trumpet section leader for the Marching Scarlet Knights, Carlos has performed on major stages, including the Macy’s Thanksgiving Day Parade and London Band Week, where he represented the United States. Proficient on trumpet, flugelhorn, cornet, and piano, he brings a dynamic musical voice to every setting. Beyond the stage, he has spent the last three years assisting music teachers in New Brunswick, Edison, and Metuchen, while also gigging regularly in Latin jazz, salsa, reggae, hip-hop fusion, and funk. Passionate about both performance and teaching, Carlos also enjoys giving lessons in trumpet and music theory as he prepares to complete his student teaching in Piscataway.`
+        bio: `Carlos Hernandez is a rising trumpetist and dedicated educator, currently in his fifth year at Rutgers Mason Gross School of the Arts, where he is pursuing dual majors in Music Education and Jazz Studies. A versatile performer, he has spent the past four years making his mark in the Rutgers Marching Band, jazz ensemble, concert band, brass band, and pep band.\n\nAs trumpet section leader for the Marching Scarlet Knights, Carlos has performed on major stages, including the Macy’s Thanksgiving Day Parade and London Band Week, where he represented the United States. Proficient on trumpet, flugelhorn, cornet, and piano, he brings a dynamic musical voice to every setting. Beyond the stage, he has spent the last three years assisting music teachers in New Brunswick, Edison, and Metuchen, while also gigging regularly in Latin jazz, salsa, reggae, hip-hop fusion, and funk. Passionate about both performance and teaching, Carlos also enjoys giving lessons in trumpet and music theory as he prepares to complete his student teaching in Piscataway.`
       },
       {
         name: "Charlie Martinez",
         role: "Multi-percussionist",
         img: "Charlie-Martinez.jpg",
-        bio: `Charlie Martinez is a versatile multi-percussionist whose passion for rhythm began in his teens, inspired by his brother Chuck’s timbales gigs and the legendary sound of the Fania All-Stars. Over the years, he has built his style through rich musical experiences, performing with acclaimed artists and learning a wide range of Afro-Latin rhythms along the way.
-
-Charlie has played with renowned cuatro player Tuto Feliciano, known for his work on Puerto Rican radio, and performed with the band La Sonica, which featured notable talents including Junior Gonzales of Larry Harlow fame, acclaimed trombonist Jimmy Bosch, and vocalist Herman Olivera, known for singing with Eddie Palmieri. With deep roots, strong influences, and heartfelt gratitude for the journey, Charlie brings authenticity, energy, and seasoned musicianship to every performance.`
+        bio: `Charlie Martinez is a versatile multi-percussionist whose passion for rhythm began in his teens, inspired by his brother Chuck’s timbales gigs and the legendary sound of the Fania All-Stars. Over the years, he has built his style through rich musical experiences, performing with acclaimed artists and learning a wide range of Afro-Latin rhythms along the way.\n\nCharlie has played with renowned cuatro player Tuto Feliciano, known for his work on Puerto Rican radio, and performed with the band La Sonica, which featured notable talents including Junior Gonzales of Larry Harlow fame, acclaimed trombonist Jimmy Bosch, and vocalist Herman Olivera, known for singing with Eddie Palmieri. With deep roots, strong influences, and heartfelt gratitude for the journey, Charlie brings authenticity, energy, and seasoned musicianship to every performance.`
       },
       {
         name: "Daniel Karnaukh",
         role: "Pianist",
         img: "Daniel-Karnaukh.jpg",
-        bio: `A jazz pianist based and gigging in the NJ/NY/PA area, Daniel fuses his multifaceted musical background with all style of music he plays.
-
-Graduating with his Bachelor of Music from Oberlin Conservatory in 2024, he is currently completing his Master of Music at Rutgers University Mason Gross, under the tutelage of Orrin Evans.
-
-Whether it be swing, RnB, salsa, or fusion, Daniel enjoys bringing his colorful playing to all kinds of performances. He is extremely excited to be a part of the band and honored to contribute to this music!`
+        bio: `A jazz pianist based and gigging in the NJ/NY/PA area, Daniel fuses his multifaceted musical background with all style of music he plays.\n\nGraduating with his Bachelor of Music from Oberlin Conservatory in 2024, he is currently completing his Master of Music at Rutgers University Mason Gross, under the tutelage of Orrin Evans.\n\nWhether it be swing, RnB, salsa, or fusion, Daniel enjoys bringing his colorful playing to all kinds of performances. He is extremely excited to be a part of the band and honored to contribute to this music!`
       },
       {
         name: "Ed Washington",
         role: "Master Bass Player",
         img: "Ed-Washington.jpg",
-        bio: `Ed Washington is a versatile bassist, percussionist, vocalist, guitarist, and arranger with more than three decades of experience performing throughout the Tri-State area. A graduate of the Newark Community School of the Arts, where he studied bass, music theory, and performance under mentors Hayes Johnson and Calvin Hughes, he continued his musical development through extensive self-study and professional workshops.
-
-He has performed at numerous venues, festivals, and community events, including Americana Park Café, Nell’s, Sullivan Room, Copeland’s, Newark Symphony Hall, the Hudson River Museum, and Liberty State Park. Over the years, he has collaborated with a wide range of vocalists, spoken word artists, and bands spanning jazz, R&B, funk, Latin jazz, and blues. His long-running associations include BGT-112, Bungo’s Highlife, Alsamarol, Rhythm of the Hearts, and Punjab and Company, among others.
-
-In addition to live performances and recordings featured on various CDs and YouTube videos, he occasionally works as a DJ, curating playlists and music for venues and restaurants across the region.`
+        bio: `Ed Washington is a versatile bassist, percussionist, vocalist, guitarist, and arranger with more than three decades of experience performing throughout the Tri-State area. A graduate of the Newark Community School of the Arts, where he studied bass, music theory, and performance under mentors Hayes Johnson and Calvin Hughes, he continued his musical development through extensive self-study and professional workshops.\n\nHe has performed at numerous venues, festivals, and community events, including Americana Park Café, Nell’s, Sullivan Room, Copeland’s, Newark Symphony Hall, the Hudson River Museum, and Liberty State Park. Over the years, he has collaborated with a wide range of vocalists, spoken word artists, and bands spanning jazz, R&B, funk, Latin jazz, and blues. His long-running associations include BGT-112, Bungo’s Highlife, Alsamarol, Rhythm of the Hearts, and Punjab and Company, among others.\n\nIn addition to live performances and recordings featured on various CDs and YouTube videos, he occasionally works as a DJ, curating playlists and music for venues and restaurants across the region.`
       },
       {
         name: "Eddie Ellis",
         role: "Master Bass Player",
         img: "Eddie-Ellis.jpg",
-        bio: `Born in New York City to a musician father, Eddie Ellis was raised in East Harlem and cut his teeth playing in a range of R&B and funk bands before falling hard for jazz in high school.
-
-He studied music theory at Hunter College and built on the foundation he learned at home, while also performing and studying with keyboardists Ross Carnegie and Jimmy Sigler. Eddie performed for over ten years with The Ex-Zib-Its Steel Band, and for the past six years has continued to bring deep groove and steady artistry to The Chuck Lambert Band.`
+        bio: `Born in New York City to a musician father, Eddie Ellis was raised in East Harlem and cut his teeth playing in a range of R&B and funk bands before falling hard for jazz in high school.\n\nHe studied music theory at Hunter College and built on the foundation he learned at home, while also performing and studying with keyboardists Ross Carnegie and Jimmy Sigler. Eddie performed for over ten years with The Ex-Zib-Its Steel Band, and for the past six years has continued to bring deep groove and steady artistry to The Chuck Lambert Band.`
       },
       {
         name: "Jacob Hurlock",
