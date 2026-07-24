@@ -1,4 +1,0 @@
-<IfModule mod_headers.c>
-  Header set X-Robots-Tag "noindex, nofollow, noarchive"
-  Header set Referrer-Policy "no-referrer"
-</IfModule>
