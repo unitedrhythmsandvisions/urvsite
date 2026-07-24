@@ -153,41 +153,6 @@
  linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));}
  .contact p{margin:0; font-size:16px; line-height:1.6; color:var(--muted-strong)}
 
- .events-grid{display:grid; gap:16px}
- .event-card{
- display:grid;
- grid-template-columns:minmax(150px, 210px) 1fr;
- gap:20px;
- padding:20px;
- align-items:start;
- }
- .event-date{
- border-radius:20px;
- border:1px solid rgba(255,208,88,.26);
- background:rgba(255,208,88,.075);
- padding:18px;
- text-align:center;
- }
- .event-day{font-size:13px; font-weight:900; letter-spacing:.9px; text-transform:uppercase; color:var(--gold)}
- .event-date-number{font-size:48px; line-height:1; margin:6px 0; font-weight:950}
- .event-month{font-size:17px; font-weight:900; letter-spacing:.45px}
- .event-time{margin-top:10px; color:var(--muted-strong); font-weight:800}
- .event-info h3{margin:0 0 8px; font-size:clamp(23px, 3vw, 31px); line-height:1.12}
- .event-location{margin:0 0 6px; color:var(--muted-strong); font-weight:850}
- .event-address,.event-details{margin:0 0 12px; color:var(--muted); line-height:1.6; white-space:pre-line}
- .event-link{
- display:inline-block;
- margin-top:4px;
- padding:10px 15px;
- border-radius:999px;
- background:rgba(116,184,255,.16);
- border:1px solid rgba(116,184,255,.38);
- color:#cfe8ff !important;
- font-weight:900;
- text-decoration:none;
- }
- .event-link:hover,.event-link:focus-visible{background:rgba(116,184,255,.24)}
-
  .band-wrap{display:grid; gap:16px}
  .card{background:
  radial-gradient(300px 110px at 100% 0%, rgba(116,184,255,.08), transparent 70%),
@@ -240,10 +205,6 @@
 
  @media (max-width: 720px){
  .nav{left:14px; right:14px; justify-content:center; backdrop-filter:none; -webkit-backdrop-filter:none; background:rgba(10,12,22,.92)}
- .event-card{grid-template-columns:1fr; gap:14px; padding:18px}
- .event-date{display:grid; grid-template-columns:auto auto auto; justify-content:center; align-items:baseline; gap:8px; padding:14px}
- .event-date-number{font-size:32px; margin:0}
- .event-time{grid-column:1 / -1; margin-top:2px}
  main{width:min(1180px, 94vw); padding-top:112px}
  .brand-inner{padding:22px 18px}
  .logo-row{gap:14px; align-items:flex-start}
@@ -263,7 +224,6 @@
  <nav aria-label="Page" class="nav">
  <a href="#top">Home</a>
  <a href="#samples">Samples</a>
- <a href="#events" id="events-nav-link" hidden>Events</a>
  <a href="#contact">Contact</a>
  <a href="#band">The Band</a>
  </nav>
@@ -323,11 +283,6 @@
  </div>
  </div>
  </div>
- </section>
-
- <section class="anchor" id="events" hidden aria-live="polite">
- <h2 class="section-title">Upcoming Events</h2>
- <div class="events-grid" id="events-list"></div>
  </section>
 
  <section class="anchor" id="contact">
@@ -578,99 +533,5 @@
  </footer>
  </main>
 
- <script>
- (() => {
- const section = document.getElementById('events');
- const list = document.getElementById('events-list');
- const navLink = document.getElementById('events-nav-link');
- const siteTimeZone = 'America/New_York';
-
- const safeUrl = (value) => {
- try {
- const url = new URL(value);
- return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
- } catch {
- return '';
- }
- };
-
- const addText = (parent, tag, className, text) => {
- if (!text) return null;
- const element = document.createElement(tag);
- element.className = className;
- element.textContent = text;
- parent.appendChild(element);
- return element;
- };
-
- const formatDatePart = (date, options) => new Intl.DateTimeFormat('en-US', {
- timeZone: siteTimeZone,
- ...options
- }).format(date);
-
- fetch('events.json', { cache: 'no-store' })
- .then((response) => {
- if (!response.ok) throw new Error('Events unavailable');
- return response.json();
- })
- .then((data) => {
- const now = Date.now();
- const events = (Array.isArray(data) ? data : [])
- .map((event) => {
- const start = new Date(event.start);
- const suppliedEnd = new Date(event.end);
- const end = Number.isNaN(suppliedEnd.getTime())
- ? new Date(start.getTime() + (3 * 60 * 60 * 1000))
- : suppliedEnd;
- return { ...event, startDate: start, endDate: end };
- })
- .filter((event) => !Number.isNaN(event.startDate.getTime()) && event.endDate.getTime() > now)
- .sort((a, b) => a.startDate - b.startDate);
-
- if (!events.length) return;
-
- const fragment = document.createDocumentFragment();
- events.forEach((event) => {
- const article = document.createElement('article');
- article.className = 'card event-card';
-
- const dateBox = document.createElement('div');
- dateBox.className = 'event-date';
- addText(dateBox, 'div', 'event-day', formatDatePart(event.startDate, { weekday: 'short' }));
- addText(dateBox, 'div', 'event-date-number', formatDatePart(event.startDate, { day: 'numeric' }));
- addText(dateBox, 'div', 'event-month', formatDatePart(event.startDate, { month: 'short', year: 'numeric' }));
- addText(dateBox, 'div', 'event-time', formatDatePart(event.startDate, { hour: 'numeric', minute: '2-digit' }));
-
- const info = document.createElement('div');
- info.className = 'event-info';
- addText(info, 'h3', '', event.title || 'Live Performance');
- addText(info, 'p', 'event-location', event.location);
- addText(info, 'p', 'event-address', event.address);
- addText(info, 'p', 'event-details', event.details);
-
- const link = safeUrl(event.link);
- if (link) {
- const anchor = document.createElement('a');
- anchor.className = 'event-link';
- anchor.href = link;
- anchor.target = '_blank';
- anchor.rel = 'noopener noreferrer';
- anchor.textContent = 'Tickets & Details';
- info.appendChild(anchor);
- }
-
- article.append(dateBox, info);
- fragment.appendChild(article);
- });
-
- list.appendChild(fragment);
- section.hidden = false;
- navLink.hidden = false;
- })
- .catch(() => {
- // If the event file is missing or temporarily unavailable, keep the section hidden.
- });
- })();
- </script>
 </body>
 </html>
