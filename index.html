@@ -153,6 +153,32 @@
  linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));}
  .contact p{margin:0; font-size:16px; line-height:1.6; color:var(--muted-strong)}
 
+ .event-ticket{
+ display:grid;
+ grid-template-columns:110px 1fr;
+ align-items:stretch;
+ }
+ .event-ticket + .event-ticket{border-top:1px dashed var(--stroke-strong)}
+ .date-block{
+ background:linear-gradient(180deg, rgba(255,208,88,.22), rgba(255,208,88,.06));
+ border-right:1px dashed var(--stroke-strong);
+ display:flex; flex-direction:column; align-items:center; justify-content:center;
+ padding:20px 10px; text-align:center;
+ }
+ .date-block .mon{font-size:20px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color:var(--gold)}
+ .date-block .day{font-size:34px; font-weight:950; line-height:1.05; color:var(--fg)}
+ .ticket-body{padding:20px 22px}
+ .ticket-body h3{margin:0 0 10px; font-size:20px}
+ .ticket-body .row{display:flex; gap:8px; align-items:baseline; margin:0 0 6px; color:var(--muted-strong); font-size:14px}
+ .ticket-body .row .label{color:var(--gold); font-weight:800; min-width:64px; font-size:12px; text-transform:uppercase; letter-spacing:.4px}
+ .ticket-body .row:last-child{margin-bottom:0}
+
+ @media (max-width:480px){
+ .event-ticket{grid-template-columns:84px 1fr}
+ .date-block .day{font-size:26px}
+ .date-block .mon{font-size:16px}
+ }
+
  .band-wrap{display:grid; gap:16px}
  .card{background:
  radial-gradient(300px 110px at 100% 0%, rgba(116,184,255,.08), transparent 70%),
@@ -282,6 +308,13 @@
  </div>
  </div>
  </div>
+ </div>
+ </section>
+
+ <section class="anchor" id="events" style="display:none">
+ <h2 class="section-title">Upcoming Events</h2>
+ <div class="card" id="events-card">
+ <div id="events-list"></div>
  </div>
  </section>
 
@@ -533,5 +566,126 @@
  </footer>
  </main>
 
+<script>
+(function(){
+ var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJjQOeP0gODf31gyfQtxBUke-jZpFm0wIqx5k-IXgbuIPsNcuATEfaRnFf_L8cRazLN55jnJtoCwnX/pub?output=csv';
+ var DEBUG = true;
+
+ function parseCSV(text){
+ var rows = [], row = [], field = '', inQuotes = false;
+ for(var i=0;i<text.length;i++){
+ var c = text[i];
+ if(inQuotes){
+ if(c === '"'){
+ if(text[i+1] === '"'){ field += '"'; i++; }
+ else{ inQuotes = false; }
+ } else { field += c; }
+ } else {
+ if(c === '"'){ inQuotes = true; }
+ else if(c === ','){ row.push(field); field = ''; }
+ else if(c === '\n' || c === '\r'){
+ if(c === '\r' && text[i+1] === '\n') i++;
+ row.push(field); field = '';
+ rows.push(row); row = [];
+ } else { field += c; }
+ }
+ }
+ if(field.length || row.length){ row.push(field); rows.push(row); }
+ return rows.filter(function(r){ return r.length > 1 || (r[0] && r[0].trim() !== ''); });
+ }
+
+ function escapeHtml(str){
+ return String(str).replace(/[&<>"']/g, function(c){
+ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+ });
+ }
+
+ function cleanTime(t){
+ if(!t) return '';
+ return t.trim().replace(/(\d{1,2}:\d{2}):\d{2}/, '$1');
+ }
+
+ function parseDateOnly(str){
+ if(!str) return null;
+ var parts = str.trim().split('/');
+ if(parts.length !== 3){
+ var d = new Date(str);
+ return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+ }
+ var m = parseInt(parts[0], 10), d2 = parseInt(parts[1], 10), y = parseInt(parts[2], 10);
+ if(!m || !d2 || !y) return null;
+ return new Date(y, m - 1, d2);
+ }
+
+ function renderEvents(events){
+ var list = document.getElementById('events-list');
+ list.innerHTML = events.map(function(ev){
+ var mon = ev.eventDate.toLocaleString('en-US', { month: 'short' });
+ var day = ev.eventDate.getDate();
+ var timeRange = ev.start && ev.end ? (cleanTime(ev.start) + ' \u2013 ' + cleanTime(ev.end)) : (cleanTime(ev.start) || cleanTime(ev.end) || '');
+ var rows = '';
+ if(timeRange) rows += '<div class="row"><span class="label">Time</span><span>' + escapeHtml(timeRange) + '</span></div>';
+ if(ev.location) rows += '<div class="row"><span class="label">Where</span><span>' + escapeHtml(ev.location) + '</span></div>';
+ return '<div class="event-ticket">' +
+ '<div class="date-block"><div class="mon">' + escapeHtml(mon) + '</div><div class="day">' + day + '</div></div>' +
+ '<div class="ticket-body"><h3>' + escapeHtml(ev.title) + '</h3>' + rows + '</div>' +
+ '</div>';
+ }).join('');
+ }
+
+ function showDebug(msg){
+ if(!DEBUG) return;
+ var section = document.getElementById('events');
+ var list = document.getElementById('events-list');
+ if(list) list.innerHTML = '<p style="color:var(--muted-strong); font-size:14px; padding:16px 4px;">DEBUG: ' + escapeHtml(msg) + '</p>';
+ if(section) section.style.display = '';
+ }
+
+ function loadEvents(){
+ fetch(CSV_URL)
+ .then(function(res){
+ if(!res.ok) throw new Error('HTTP ' + res.status + ' ' + res.statusText);
+ return res.text();
+ })
+ .then(function(text){
+ var rows = parseCSV(text);
+ if(!rows.length){ showDebug('CSV came back empty.'); return; }
+ var dataRows = rows.slice(1);
+ var today = new Date();
+ today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+ var events = [];
+ for(var i=0;i<dataRows.length;i++){
+ var r = dataRows[i];
+ var title = (r[1] || '').trim();
+ var dateStr = (r[2] || '').trim();
+ var start = (r[3] || '').trim();
+ var end = (r[4] || '').trim();
+ var location = (r[5] || '').trim();
+ if(!title || !dateStr) continue;
+ var eventDate = parseDateOnly(dateStr);
+ if(!eventDate) continue;
+ var expireDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate() + 2);
+ if(today < expireDate){
+ events.push({ title: title, eventDate: eventDate, start: start, end: end, location: location });
+ }
+ }
+ events.sort(function(a,b){ return a.eventDate - b.eventDate; });
+ if(events.length === 0){ showDebug('Fetched ' + dataRows.length + ' data row(s) but none matched the visible date window.'); return; }
+ renderEvents(events);
+ var section = document.getElementById('events');
+ if(section) section.style.display = '';
+ })
+ .catch(function(err){
+ showDebug('Fetch failed: ' + (err && err.message ? err.message : err));
+ });
+ }
+
+ if(document.readyState === 'loading'){
+ document.addEventListener('DOMContentLoaded', loadEvents);
+ } else {
+ loadEvents();
+ }
+})();
+</script>
 </body>
 </html>
