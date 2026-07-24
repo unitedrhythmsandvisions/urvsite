@@ -586,12 +586,15 @@
 
  function parseDateOnly(str){
  if(!str) return null;
- var parts = str.trim().split('/');
+ str = str.trim().replace(/\s+/g, ' ');
+ var parts = str.split('/');
  if(parts.length !== 3){
  var d = new Date(str);
  return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
  }
- var m = parseInt(parts[0], 10), d2 = parseInt(parts[1], 10), y = parseInt(parts[2], 10);
+ var m = parseInt(parts[0], 10), d2 = parseInt(parts[1], 10);
+ var yMatch = parts[2].match(/\d+/);
+ var y = yMatch ? parseInt(yMatch[0], 10) : NaN;
  if(!m || !d2 || !y) return null;
  return new Date(y, m - 1, d2);
  }
