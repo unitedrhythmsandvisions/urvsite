@@ -153,12 +153,6 @@
  linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));}
  .contact p{margin:0; font-size:16px; line-height:1.6; color:var(--muted-strong)}
 
- .event-item{padding:18px 20px}
- .event-item + .event-item{border-top:1px solid var(--stroke)}
- .event-item .line1{font-weight:900; font-size:16px; color:var(--fg); margin:0 0 4px; line-height:1.4}
- .event-item .line2{font-weight:800; font-style:italic; color:var(--gold); margin:0 0 4px; font-size:15px; line-height:1.4}
- .event-item .line3{font-weight:400; color:var(--muted-strong); margin:0; font-size:15px; line-height:1.4}
-
  .band-wrap{display:grid; gap:16px}
  .card{background:
  radial-gradient(300px 110px at 100% 0%, rgba(116,184,255,.08), transparent 70%),
@@ -223,6 +217,16 @@
  html{scroll-behavior:auto}
  .nav a{transition:none}
  }
+
+ .events-card{padding:20px;background:radial-gradient(420px 150px at 100% 0%, rgba(255,208,88,.09), transparent 70%),linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045));}
+ .events-intro{margin:0 0 16px;color:var(--muted);line-height:1.6}
+ .calendar-shell{border:1px solid var(--stroke);border-radius:18px;overflow:hidden;background:#fff;box-shadow:var(--shadow-soft)}
+ .calendar-shell iframe{display:block;width:100%;height:350px;border:0}
+ .events-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+ .events-button{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,208,88,.36);background:rgba(255,208,88,.1);color:var(--fg)!important;text-decoration:none;font-weight:800}
+ .events-button:hover,.events-button:focus-visible{background:rgba(255,208,88,.18)}
+ @media (max-width:720px){.calendar-shell iframe{height:350px}.events-card{padding:16px}}
+
  </style>
 </head>
 <body>
@@ -230,6 +234,7 @@
  <nav aria-label="Page" class="nav">
  <a href="#top">Home</a>
  <a href="#samples">Samples</a>
+ <a href="#events">Events</a>
  <a href="#contact">Contact</a>
  <a href="#band">The Band</a>
  </nav>
@@ -291,10 +296,13 @@
  </div>
  </section>
 
- <section class="anchor" id="events" style="display:none">
+
+ <section class="anchor" id="events">
  <h2 class="section-title">Upcoming Events</h2>
- <div class="card" id="events-card">
- <div id="events-list"></div>
+ <div class="card events-card">
+ <div class="calendar-shell">
+ <iframe src="https://calendar.google.com/calendar/embed?src=unitedrhythmsandvisions%40gmail.com&amp;ctz=America%2FNew_York&amp;mode=AGENDA&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0" title="Upcoming Events calendar" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+ </div>
  </div>
  </section>
 
@@ -546,142 +554,5 @@
  </footer>
  </main>
 
-<script>
-(function(){
- var SHEET_ID = '1wOVsQCWRBXdcZK_CByF79b8sKkraeUIbbmw16zSIo90';
- var SHEET_GID = '1933040629';
- var DEBUG = false;
-
- function escapeHtml(str){
- return String(str).replace(/[&<>"']/g, function(c){
- return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
- });
- }
-
- function parseTimeParts(t){
- if(!t) return null;
- var m = t.trim().match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*([AP]M)/i);
- if(!m) return null;
- return { hour: parseInt(m[1], 10), minute: parseInt(m[2], 10), period: m[3].toUpperCase() };
- }
-
- function formatTimePart(tp, includePeriod){
- var s = String(tp.hour);
- if(tp.minute) s += ':' + (tp.minute < 10 ? '0' : '') + tp.minute;
- if(includePeriod) s += tp.period.toLowerCase();
- return s;
- }
-
- function formatTimeRange(startStr, endStr){
- var start = parseTimeParts(startStr);
- var end = parseTimeParts(endStr);
- if(start && end){
- var samePeriod = start.period === end.period;
- return formatTimePart(start, !samePeriod) + '\u2013' + formatTimePart(end, true);
- }
- if(start) return formatTimePart(start, true);
- if(end) return formatTimePart(end, true);
- return '';
- }
-
- function parseDateOnly(str){
- if(!str) return null;
- str = str.trim().replace(/\s+/g, ' ');
- var parts = str.split('/');
- if(parts.length !== 3){
- var d = new Date(str);
- return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
- }
- var m = parseInt(parts[0], 10), d2 = parseInt(parts[1], 10);
- var yMatch = parts[2].match(/\d+/);
- var y = yMatch ? parseInt(yMatch[0], 10) : NaN;
- if(!m || !d2 || !y) return null;
- return new Date(y, m - 1, d2);
- }
-
- function renderEvents(events){
- var list = document.getElementById('events-list');
- list.innerHTML = events.map(function(ev){
- var dateStr = ev.eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
- var timeRange = formatTimeRange(ev.start, ev.end);
- var line1 = timeRange ? (dateStr + ', ' + timeRange) : dateStr;
- var line2 = ev.location || '';
- var line3 = ev.title || '';
- return '<div class="event-item">' +
- '<p class="line1">' + escapeHtml(line1) + '</p>' +
- (line2 ? '<p class="line2">' + escapeHtml(line2) + '</p>' : '') +
- (line3 ? '<p class="line3">' + escapeHtml(line3) + '</p>' : '') +
- '</div>';
- }).join('');
- }
-
- function showDebug(msg){
- if(!DEBUG) return;
- var section = document.getElementById('events');
- var list = document.getElementById('events-list');
- if(list) list.innerHTML = '<p style="color:var(--muted-strong); font-size:14px; padding:16px 4px;">DEBUG: ' + escapeHtml(msg) + '</p>';
- if(section) section.style.display = '';
- }
-
- function cellValue(c, idx){
- if(!c || !c[idx]) return '';
- var cellObj = c[idx];
- if(cellObj.f !== undefined && cellObj.f !== null) return String(cellObj.f);
- if(cellObj.v !== undefined && cellObj.v !== null) return String(cellObj.v);
- return '';
- }
-
- function processResponse(resp){
- var table = resp && resp.table;
- var rows = table && table.rows;
- if(!rows || !rows.length){ showDebug('Sheet loaded, but returned zero data rows.'); return; }
- var today = new Date();
- today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
- var events = [];
- for(var i=0;i<rows.length;i++){
- var c = rows[i].c;
- var title = cellValue(c, 1).trim();
- var dateStr = cellValue(c, 2).trim();
- var start = cellValue(c, 3).trim();
- var end = cellValue(c, 4).trim();
- var location = cellValue(c, 5).trim();
- if(!title || !dateStr) continue;
- var eventDate = parseDateOnly(dateStr);
- if(!eventDate) continue;
- var expireDate = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate() + 2);
- if(today < expireDate){
- events.push({ title: title, eventDate: eventDate, start: start, end: end, location: location });
- }
- }
- events.sort(function(a,b){ return a.eventDate - b.eventDate; });
- if(events.length === 0){ showDebug('Sheet loaded (' + rows.length + ' row(s)), but none matched the visible date window.'); return; }
- renderEvents(events);
- var section = document.getElementById('events');
- if(section) section.style.display = '';
- }
-
- function loadEvents(){
- var cbName = '__sheetCB_' + Date.now();
- var script = document.createElement('script');
- window[cbName] = function(resp){
- try{ processResponse(resp); }
- catch(e){ showDebug('Parse error: ' + (e && e.message ? e.message : e)); }
- delete window[cbName];
- if(script.parentNode) script.parentNode.removeChild(script);
- };
- script.onerror = function(){
- showDebug('Script tag failed to load the sheet feed.');
- };
- script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?gid=' + SHEET_GID + '&tqx=out:json;responseHandler:' + cbName;
- document.body.appendChild(script);
- }
-
- if(document.readyState === 'loading'){
- document.addEventListener('DOMContentLoaded', loadEvents);
- } else {
- loadEvents();
- }
-})();
-</script>
 </body>
 </html>
