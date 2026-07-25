@@ -200,6 +200,17 @@
  .bio-par{margin:0 0 12px; color:var(--muted); line-height:1.7; white-space:pre-line}
  .bio-par:last-child{margin-bottom:0}
 
+ .events-list{display:grid; gap:12px}
+ .event-item{
+ padding:14px 16px;
+ border-radius:14px;
+ background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.1);
+ }
+ .event-date{margin:0 0 4px; color:var(--gold); font-weight:800; letter-spacing:.2px; font-size:14px}
+ .event-desc{margin:0; color:var(--muted); line-height:1.6}
+ .events-status{margin:0; color:var(--muted)}
+
  footer{padding:20px 0 56px; color:var(--muted)}
  .stage-photo{width:100%; height:auto; border-radius: calc(var(--r) + 6px); border:1px solid var(--stroke-strong); box-shadow: var(--shadow)}
 
@@ -288,8 +299,14 @@
 
  <section class="anchor" id="events">
  <h2 class="section-title">Events</h2>
- <div class="band-wrap" id="events-container">
- <p style="color:var(--muted)">Loading events...</p>
+ <div class="card">
+ <div class="card-inner" style="grid-template-columns:1fr; gap:16px;">
+ <div class="bio">
+ <div class="events-list" id="events-list">
+ <p class="events-status">Loading events…</p>
+ </div>
+ </div>
+ </div>
  </div>
  </section>
 
@@ -542,61 +559,143 @@
  </main>
 
  <script>
- document.addEventListener("DOMContentLoaded", function() {
- fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vS5rA2sDVOxauCZuCjTX7Va6d4w5otPMQiMwNU97zgO2NKodTJwfUAJ7iVUpY8iCyW55pR5-jwk1gJb/pub?output=csv')
- .then(response => response.text())
- .then(csvText => {
- const rows = csvText.trim().split('\n');
- const container = document.getElementById('events-container');
- 
- function parseCSVLine(text) {
- let ret = [], inQuote = false, val = '';
- for (let i = 0; i < text.length; i++) {
- let char = text[i];
- if (char === '"') {
- if (inQuote && text[i+1] === '"') { val += '"'; i++; } else { inQuote = !inQuote; }
- } else if (char === ',' && !inQuote) {
- ret.push(val.trim()); val = '';
+ (function(){
+ var EVENTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5rA2sDVOxauCZuCjTX7Va6d4w5otPMQiMwNU97zgO2NKodTJwfUAJ7iVUpY8iCyW55pR5-jwk1gJb/pub?output=csv";
+
+ // Minimal CSV parser that handles quoted fields containing commas.
+ function parseCSV(text){
+ var rows = [], row = [], cur = "", inQuotes = false;
+ for (var i = 0; i < text.length; i++){
+ var ch = text[i];
+ if (inQuotes){
+ if (ch === '"'){
+ if (text[i+1] === '"'){ cur += '"'; i++; }
+ else { inQuotes = false; }
+ } else { cur += ch; }
  } else {
- val += char;
+ if (ch === '"'){ inQuotes = true; }
+ else if (ch === ','){ row.push(cur); cur = ""; }
+ else if (ch === '\n' || ch === '\r'){
+ if (ch === '\r' && text[i+1] === '\n') i++;
+ row.push(cur); cur = "";
+ rows.push(row); row = [];
+ } else { cur += ch; }
  }
  }
- ret.push(val.trim());
- return ret;
+ if (cur !== "" || row.length){ row.push(cur); rows.push(row); }
+ return rows;
  }
 
- if (rows.length <= 1) {
- container.innerHTML = '<p style="color:var(--muted)">No upcoming events at this time.</p>';
+ // Splits "July 8th: Program Development from 1:00 to 5:30"
+ // into a bolded date part and a description part.
+ function splitEvent(line){
+ var idx = line.indexOf(":");
+ if (idx === -1) return { date: "", desc: line.trim() };
+ return { date: line.slice(0, idx).trim(), desc: line.slice(idx + 1).trim() };
+ }
+
+ function renderEvents(lines){
+ var list = document.getElementById("events-list");
+ list.innerHTML = "";
+
+ if (!lines.length){
+ var empty = document.createElement("p");
+ empty.className = "events-status";
+ empty.textContent = "No events scheduled right now — check back soon.";
+ list.appendChild(empty);
  return;
  }
 
- let html = '';
- for (let i = 1; i < rows.length; i++) {
- const cols = parseCSVLine(rows[i]).filter(c => c !== '');
- if (cols.length === 0) continue;
- 
- const title = cols[0];
- let detailsHtml = '';
- for (let j = 1; j < cols.length; j++) {
- detailsHtml += `<p class="role" style="margin-bottom:8px">${cols[j]}</p>`;
+ lines.forEach(function(line){
+ var parts = splitEvent(line);
+ var item = document.createElement("div");
+ item.className = "event-item";
+
+ if (parts.date){
+ var dateEl = document.createElement("p");
+ dateEl.className = "event-date";
+ dateEl.textContent = parts.date;
+ item.appendChild(dateEl);
  }
- 
- html += `
- <article class="card">
- <div class="card-inner" style="grid-template-columns:1fr; gap:16px;">
- <div class="bio">
- <h3 style="margin-bottom:12px">${title}</h3>
- ${detailsHtml}
- </div>
- </div>
- </article>`;
+
+ var descEl = document.createElement("p");
+ descEl.className = "event-desc";
+ descEl.textContent = parts.desc;
+ item.appendChild(descEl);
+
+ list.appendChild(item);
+ });
  }
- container.innerHTML = html;
+
+ function handleText(text){
+ var rows = parseCSV(text);
+ var lines = rows
+ .map(function(r){ return (r[0] || "").trim(); })
+ .filter(function(v){ return v.length > 0; });
+ renderEvents(lines);
+ }
+
+ function showError(){
+ var list = document.getElementById("events-list");
+ list.innerHTML = "";
+ var errEl = document.createElement("p");
+ errEl.className = "events-status";
+ errEl.textContent = "Events are temporarily unavailable. Please check back later.";
+ list.appendChild(errEl);
+ }
+
+ // Primary method: plain fetch. Works on any real http/https host.
+ function loadViaFetch(){
+ return fetch(EVENTS_CSV_URL).then(function(res){
+ if (!res.ok) throw new Error("Network response was not ok");
+ return res.text();
+ });
+ }
+
+ // Fallback method: a <script> tag isn't subject to CORS at all, so this
+ // works even when the page is opened directly as a local file (file://),
+ // where the browser sends Origin: null and a plain fetch() gets blocked.
+ // Routed through a JSONP-friendly proxy that hands the CSV text back to
+ // a callback function instead of via fetch.
+ function loadViaJSONP(){
+ return new Promise(function(resolve, reject){
+ var cbName = "__eventsJSONP_" + Date.now();
+ var script = document.createElement("script");
+
+ function cleanup(){
+ delete window[cbName];
+ if (script.parentNode) script.parentNode.removeChild(script);
+ }
+
+ window[cbName] = function(data){
+ cleanup();
+ if (data && typeof data.contents === "string") resolve(data.contents);
+ else reject(new Error("Unexpected JSONP response"));
+ };
+
+ script.src = "https://api.allorigins.win/get?url=" +
+ encodeURIComponent(EVENTS_CSV_URL) + "&callback=" + cbName;
+ script.onerror = function(){ cleanup(); reject(new Error("JSONP request failed")); };
+ document.body.appendChild(script);
+
+ setTimeout(function(){
+ if (window[cbName]){ cleanup(); reject(new Error("JSONP timed out")); }
+ }, 8000);
+ });
+ }
+
+ loadViaFetch()
+ .catch(function(err){
+ console.warn("Direct fetch failed, falling back to JSONP:", err);
+ return loadViaJSONP();
  })
- .catch(err => {
- document.getElementById('events-container').innerHTML = '<p style="color:var(--muted)">Unable to load events at this time.</p>';
+ .then(handleText)
+ .catch(function(err){
+ console.error("Failed to load events:", err);
+ showError();
  });
- });
+ })();
  </script>
+
 </body>
 </html>
